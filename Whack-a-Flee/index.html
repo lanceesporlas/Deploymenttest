@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | Uni-Jump</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+</head>
+
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+
+  <div id="start-screen">
+    <div id="background-icons">
+      <img id="dog-icon" src="TemplateData/Dog loading.gif" alt="dog icon">
+      <p id="loading-text"></p>
+    </div>
+  </div>
+
+
+  <div id="unity-container" style="display: none;">
+    <canvas id="unity-canvas" width=540 height=960 tabindex="-1"
+      style="width: 540px; height: 960px; background: #231F20"></canvas>
+  </div>
+
+  <script src="Build/Whack-a-Flee.loader.js"></script>
+
+  <script>
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Mobile device style: fill the whole browser client area with the game canvas:
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      var canvas = document.querySelector("#unity-canvas");
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.position = "fixed";
+
+      document.body.style.textAlign = "left";
+    }
+
+    // Customized Js Code for initializing game with loading design
+    const startScreen = document.querySelector("#start-screen");
+    const unityContainer = document.querySelector("#unity-container");
+    const unityCanvas = document.querySelector("#unity-canvas");
+
+    let myGameInstance = null;
+
+    const config = {
+      dataUrl: "Build/Whack-a-Flee.data",
+      frameworkUrl: "Build/Whack-a-Flee.framework.js",
+  codeUrl: "Build/Whack-a-Flee.wasm",
+    streamingAssetsUrl: "StreamingAssets",
+    companyName: "HSI",
+    productName: "Uni-Jump",
+    productVersion: "1.2.0 (8)",
+};
+
+    createUnityInstance(unityCanvas, config, (progress) => {
+    }).then((unityInstance) => {
+      // Success: Unity is fully loaded and initialized
+      myGameInstance = unityInstance;
+
+      startScreen.classList.add("fade-out");
+
+      startScreen.style.display = "none";
+      unityContainer.style.display = "block";
+    })
+      .catch((message) => {
+        console.error("Unity Loading Failed:", message);
+      });
+
+  </script>
+</body>
+
+</html>
